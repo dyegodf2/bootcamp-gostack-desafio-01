@@ -2,6 +2,7 @@ const express = require('express')
 
 const server = express()
 
+let request = 0
 const projects = [
   {
     id: '0',
@@ -21,7 +22,17 @@ const projects = [
 ]
 
 // Middlewares
-server.use(express.json())
+server.use(countRequest, express.json())
+
+function countRequest (req, res, next) {
+  console.time('Request')
+
+  request++
+  console.log(`Total de requisições: ${request}`)
+  next()
+
+  console.timeEnd('Request')
+}
 
 function checkProjectExists (req, res, next) {
   const { id } = req.params
