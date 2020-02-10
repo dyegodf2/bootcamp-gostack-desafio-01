@@ -6,6 +6,10 @@ server.use(express.json())
 
 const projects = []
 
+server.get('/projects', (req, res) => {
+  return res.json(projects)
+})
+
 server.post('/projects', (req, res) => {
   const { id, title, tasks } = req.body
   const project = { id, title, tasks }
