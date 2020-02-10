@@ -4,7 +4,23 @@ const server = express()
 
 server.use(express.json())
 
-const projects = []
+const projects = [
+  {
+    id: '0',
+    title: 'Projeto 0',
+    tasks: []
+  },
+  {
+    id: '1',
+    title: 'Projeto 1',
+    tasks: []
+  },
+  {
+    id: '3',
+    title: 'Projeto 3',
+    tasks: []
+  }
+]
 
 server.get('/projects', (req, res) => {
   return res.json(projects)
@@ -15,6 +31,15 @@ server.post('/projects', (req, res) => {
   const project = { id, title, tasks }
 
   projects.push(project)
+
+  return res.json(projects)
+})
+
+server.put('/projects/:id', (req, res) => {
+  const { id } = req.params
+  const { title } = req.body
+
+  projects[id].title = title
 
   return res.json(projects)
 })
