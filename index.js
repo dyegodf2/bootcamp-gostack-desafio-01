@@ -2,8 +2,6 @@ const express = require('express')
 
 const server = express()
 
-server.use(express.json())
-
 const projects = [
   {
     id: '0',
@@ -22,43 +20,54 @@ const projects = [
   }
 ]
 
+// Middlewares
+server.use(express.json())
+
+function checkProjectExists (req, res, next) {
+  const { id } = req.params
+  if (!projects[id]) return res.status(400).json({ message: 'Project does not exist' })
+
+  next()
+}
+
+// Routes
+// Listando projeto
 server.get('/projects', (req, res) => {
   return res.json(projects)
 })
 
+// Adicionando projeto
 server.post('/projects', (req, res) => {
   const { id, title, tasks } = req.body
   const project = { id, title, tasks }
 
   projects.push(project)
-
   return res.json(projects)
 })
 
-server.post('/projects/:id/tasks', (req, res) => {
+// Adicionanto trabalho
+server.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
   const { id } = req.params
   const { tasks } = req.body
 
   projects[id].tasks.push(tasks)
-
-  console.log(id, tasks)
   return res.json({ message: 'Ok' })
 })
 
-server.put('/projects/:id', (req, res) => {
+// Editando projeto
+server.put('/projects/:id', checkProjectExists, (req, res) => {
   const { id } = req.params
   const { title } = req.body
 
   projects[id].title = title
-
   return res.json(projects)
 })
 
-server.delete('/projects/:id', (req, res) => {
+// Deletando projeto
+server.delete('/projects/:id', checkProjectExists, (req, res) => {
   const { id } = req.params
 
   projects.splice(id, 1)
-
   return res.json(projects)
 })
 
