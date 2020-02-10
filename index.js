@@ -35,6 +35,16 @@ server.post('/projects', (req, res) => {
   return res.json(projects)
 })
 
+server.post('/projects/:id/tasks', (req, res) => {
+  const { id } = req.params
+  const { tasks } = req.body
+
+  projects[id].tasks.push(tasks)
+
+  console.log(id, tasks)
+  return res.json({ message: 'Ok' })
+})
+
 server.put('/projects/:id', (req, res) => {
   const { id } = req.params
   const { title } = req.body
