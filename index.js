@@ -44,4 +44,12 @@ server.put('/projects/:id', (req, res) => {
   return res.json(projects)
 })
 
+server.delete('/projects/:id', (req, res) => {
+  const { id } = req.params
+
+  projects.splice(id, 1)
+
+  return res.json(projects)
+})
+
 server.listen(3000)
